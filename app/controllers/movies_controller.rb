@@ -15,21 +15,21 @@ class MoviesController < ApplicationController
     # @movies = Movie.order(params[:sort_by])
     # @sort_column = params[:sort_by]
     if params[:commit] == 'Refresh'
-          session[:ratings] = params[:ratings]
+      session[:ratings] = params[:ratings]
     elsif session[:ratings] != params[:ratings]
-          redirect = true
-          params[:ratings] = session[:ratings]
+      redirect = true
+      params[:ratings] = session[:ratings]
     end
 
     if params[:order]
-          session[:order] = params[:order]
+      session[:order] = params[:order]
     elsif session[:order]
-          redirect = true
-          params[:order] = session[:order]
+      redirect = true
+      params[:order] = session[:order]
     end
     @ratings, @order = session[:ratings], session[:order]
     if redirect
-        redirect_to movies_path({:order=>@order, :ratings=>@ratings})
+      redirect_to movies_path({:order=>@order, :ratings=>@ratings})
     end
     @all_ratings= Movie.all_ratings
     @selected_ratings= params[:ratings] ? params[:ratings].keys : @all_ratings
