@@ -10,35 +10,45 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-  def index
-    # @movies = Movie.all
-    # @movies = Movie.order(params[:sort_by])
-    @sort_column = params[:sort_by]
+  # def index
+  #   # @movies = Movie.all
+  #   @sort_column = params[:sort_by]
+    
+  #   @ratings, @order = params[:ratings], params[:order]
+  #   @all_ratings= Movie.all_ratings
+  #   @selected_ratings= params[:ratings] ? params[:ratings].keys : @all_ratings
+  #   @movies= Movie.where({rating: @selected_ratings}).order(params[:sort_by])
     
     
-    # if params[:commit] == 'Refresh'
-    #   session[:ratings] = params[:ratings]
-    # elsif session[:ratings] != params[:ratings]
-    #   redirect = true
-    #   params[:ratings] = session[:ratings]
-    # end
+  # end
 
-    # if params[:order]
-    #   session[:order] = params[:order]
-    # elsif session[:order]
-    #   redirect = true
-    #   params[:order] = session[:order]
-    # end
+  def index
+
+    if params.key?(:sort_by)
+        session[:sort_by] = params[:sort_by]
+    elsif session.key?(:sort_by)
+        params[:sort_by] = session[:sort_by]
+        redirect_to movies_path(params) and return
+    end
+    if params.key?(:ratings)
+        session[:ratings] = params[:ratings]
+    elsif session.key?(:ratings)
+        params[:ratings] = session[:ratings]
+        redirect_to movies_path(params) and return
+    end
+
+    @sort_column = params[:sort_by]
     @ratings, @order = params[:ratings], params[:order]
-    # if redirect
-    #   redirect_to movies_path({:order=>@order, :ratings=>@ratings})
-    # end
     @all_ratings= Movie.all_ratings
-    @selected_ratings= params[:ratings] ? params[:ratings].keys : @all_ratings
+
+	  @selected_ratings = (session[:ratings].keys if session.key?(:ratings)) || @all_ratings
     @movies= Movie.where({rating: @selected_ratings}).order(params[:sort_by])
     
     
   end
+
+
+
 
   def new
     # default: render 'new' template
