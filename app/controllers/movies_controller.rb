@@ -13,7 +13,7 @@ class MoviesController < ApplicationController
   def index
     # @movies = Movie.all
     # @movies = Movie.order(params[:sort_by])
-    # @sort_column = params[:sort_by]
+    @sort_column = params[:sort_by]
     
     
     # if params[:commit] == 'Refresh'
@@ -35,7 +35,7 @@ class MoviesController < ApplicationController
     # end
     @all_ratings= Movie.all_ratings
     @selected_ratings= params[:ratings] ? params[:ratings].keys : @all_ratings
-    @movies= Movie.where({rating: @selected_ratings}).order(params[:order])
+    @movies= Movie.where({rating: @selected_ratings}).order(params[:sort_by])
     
     
   end
